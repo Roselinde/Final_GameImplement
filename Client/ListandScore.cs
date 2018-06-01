@@ -7,10 +7,10 @@ public class ListandScore : MonoBehaviour {
 
     private static ListandScore instance;
 
-    public Text userID;
-    public Text score;
+    public Text[] userID;
+    public Text[] score;
 
-    public Text Score
+    public Text[] Score
     {
         get
         {
@@ -23,7 +23,7 @@ public class ListandScore : MonoBehaviour {
         }
     }
 
-    public Text UserID
+    public Text[] UserID
     {
         get
         {
@@ -56,8 +56,8 @@ public class ListandScore : MonoBehaviour {
     }
 
     void Start () {
-		
-	}
+
+    }
 	
 	// Update is called once per frame
 	void Update () {

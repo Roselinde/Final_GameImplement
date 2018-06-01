@@ -59,7 +59,7 @@ public class CreateUserIDScript : MonoBehaviour {
 
         int emptyScore = 0;
 
-        UserIDCreate = "http://localhost:8081/user/add?name=" + EnterUserID + "&password=" + EnterPassword + "&score=" + emptyScore;
+        UserIDCreate = "http://ec2-13-229-197-129.ap-southeast-1.compute.amazonaws.com:8081/user/add?name=" + EnterUserID + "&password=" + EnterPassword + "&score=" + emptyScore;
         URL_ADD = UserIDCreate;
 
         Debug.Log("" + UserIDCreate);
@@ -75,7 +75,8 @@ public class CreateUserIDScript : MonoBehaviour {
         }
         catch (WebException ex)
         {
-
+            Debug.LogError(ex);
+            SceneNavigation.Instance.NotificationText.text = "Error with connection to server";
         }
 
     }

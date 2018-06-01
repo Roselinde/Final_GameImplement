@@ -36,6 +36,7 @@ app.get('/user/add', function (req, res) {
 });
 app.get('/user/id', function (req, res) {
 
+
 	ShowUserID(function (err, result) {
 		res.end(result);
 	});

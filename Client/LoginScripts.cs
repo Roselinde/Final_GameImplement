@@ -17,9 +17,12 @@ public class LoginScripts : MonoBehaviour {
     public InputField UserIDEnter;
     public InputField passwordEnter;
 
+    [SerializeField]
 	private string loginUser;
+    public static string currentUser;
     public string UserIDkey { get; set; }
     private string passwordkey;
+
 
     public LeaderBoardScript leaderboard;
 
@@ -44,7 +47,8 @@ public class LoginScripts : MonoBehaviour {
 
     void Start()
     {
-
+        loginUser = PlayerPrefs.GetString("CurrentUser");
+        currentUser = loginUser;
     }
 
     // Update is called once per frame
@@ -54,9 +58,11 @@ public class LoginScripts : MonoBehaviour {
         UserIDkey = UserIDEnter.text;
         passwordkey = passwordEnter.text;
         
-		loginUser = "http://localhost:8081/user/login/" + UserIDkey;
-		URL = loginUser;
+		URL = "http://ec2-13-229-197-129.ap-southeast-1.compute.amazonaws.com:8081/user/login/" + UserIDkey;
+		loginUser = UserIDkey;
+        currentUser = loginUser;
 
+        PlayerPrefs.SetString("CurrentUser", currentUser);
 
         try
         {
@@ -77,22 +83,22 @@ public class LoginScripts : MonoBehaviour {
 				{
 					
 					print("True");
-                    SceneNavigation.Instance.StartCoroutine(SceneNavigation.Instance.LoginSuccess());
+                    SceneNavigation.Instance.LoginSuccess();
 
                     if (PlayerPrefs.HasKey("Highscore"))
                     {
-                        PlayerPrefs.GetInt("Highscore", PlayerController.Instance.HighScore);
+                        HSManager.Instance.HighScore = PlayerPrefs.GetInt("Highscore");
                     }
                     else
                     {
-                        PlayerController.Instance.HighScore = 0;
+                        HSManager.Instance.HighScore = 0;
                     }
 
-                    SceneNavigation.Instance.HighScoreText.text = "Highscore : " + PlayerController.Instance.HighScore.ToString();
+                    SceneNavigation.Instance.HighScoreText.text = "Highscore : " + HSManager.Instance.HighScore.ToString();
                 }
 				else
 				{
-                    SceneNavigation.Instance.StartCoroutine(SceneNavigation.Instance.LoginFail());
+                    SceneNavigation.Instance.StartCoroutine(SceneNavigation.Instance.LoginFailPassword());
 
                     print("passF");
 				}
@@ -100,13 +106,14 @@ public class LoginScripts : MonoBehaviour {
 			}
 			else
 			{
-                SceneNavigation.Instance.StartCoroutine(SceneNavigation.Instance.LoginFail());
+                SceneNavigation.Instance.StartCoroutine(SceneNavigation.Instance.LoginFailUser());
                 print("userF");
 
 			}
         }
         catch (WebException ex)
         {
+            Debug.LogError(ex);
 
         }
        

@@ -2,27 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using Newtonsoft.Json;
+
 public class UserID
 {
-    private static UserID instance;
-
-    public static UserID Instance
-    {
-        get
-        {
-            return instance;
-        }
-
-        set
-        {
-            instance = value;
-        }
-    }
-
-    public string name { get; set; }
-    public string password { get; set; }
-    public int score { get; set; }
+    [JsonProperty("id")]
     public int id { get; set; }
+    [JsonProperty("name")]
+    public string name { get; set; }
+    [JsonProperty("password")]
+    public string password { get; set; }
+    [JsonProperty("score")]
+    public int score { get; set; }
 
 
 }

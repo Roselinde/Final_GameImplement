@@ -18,9 +18,9 @@ public class LeaderBoardScript : MonoBehaviour
 
     private GameObject useridText;
 
+    
 
-
-    public string URL = "http://localhost:8081/user/id";
+    public string URL = "http://ec2-13-229-197-129.ap-southeast-1.compute.amazonaws.com:8081/user/id";
 
     public static LeaderBoardScript Instance
     {
@@ -54,6 +54,7 @@ public class LeaderBoardScript : MonoBehaviour
 	}
     public void ShowList()
     {
+        URL = "http://ec2-13-229-197-129.ap-southeast-1.compute.amazonaws.com:8081/user/id";
         try
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(URL);
@@ -63,38 +64,48 @@ public class LeaderBoardScript : MonoBehaviour
 
 
             UserID[] userIDs = JsonConvert.DeserializeObject<UserID[]>(responseBody);
-            for (int i = 0; i < userIDs.Length; i++)
+            for (int i = 0; i < 10; i++)
             {
-                GameObject listID = Instantiate(listUserID) as GameObject;
+                //GameObject listID = Instantiate(listUserID) as GameObject;
 
-                listID.transform.SetParent(showListUI.transform, false);
-				ListandScore.Instance.UserID.text = "" + userIDs[i].name;
-                if (ListandScore.Instance.Score.text != null)
-                {
-                    ListandScore.Instance.Score.text = "" + userIDs[i].score;
-                }
-                if (ListandScore.Instance.Score.text == null)
-                {
-                    ListandScore.Instance.Score.text = 0.ToString();
-                }
-                  
-  
-            }          
+                //listID.transform.SetParent(showListUI.transform, false);
+                ListandScore.Instance.UserID[i].text = "" + userIDs[i].name;
+                ListandScore.Instance.Score[i].text = "" + userIDs[i].score;
+
+            }
 
         }
         catch (WebException ex)
         {
-
+            Debug.LogError(ex);
+            SceneNavigation.Instance.NotificationText.text = "Error with connection to server";
         }
 
     }
 
-    public void DelList()
+
+    public void CheckDatabase()
     {
-        foreach(Transform child in parent.transform)
-        {
-            Destroy(child.gameObject);
+        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(URL);
+        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+        Stream stream = response.GetResponseStream();
+        string responseBody = new StreamReader(stream).ReadToEnd();
 
-        }
+        
+        UserID[] userIDs = JsonConvert.DeserializeObject<UserID[]>(responseBody);
+        Debug.LogError(request);
+        Debug.LogError(response);
+        Debug.LogError(stream);
+        Debug.LogError(responseBody);
     }
+
+
+    //public void DelList()
+    //{
+    //    foreach(Transform child in parent.transform)
+    //    {
+    //        Destroy(child.gameObject);
+
+    //    }
+    //}
 }
