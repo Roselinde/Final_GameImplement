@@ -4,8 +4,8 @@ var app = express();
 var mysql = require('mysql');
 var connection = mysql.createConnection({
     host: 'localhost',
-    user: 'ab12yz89',
-    password: 'ab12yz89',
+    user: 'root',
+    password: '',
     database: 'game1'
 
 });
