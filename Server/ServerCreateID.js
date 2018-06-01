@@ -49,13 +49,6 @@ app.get('/user/login/:name', function (req, res) {
 	});
 });
 
-app.get('/user/update', function (req, res) {
-	var name = req.query.name;
-	var score = req.query.score;
-	UpdateScore(name, score, function (er, result) {
-		res.end(result);
-	});
-});
 
 
 var server = app.listen(8081, function () {
@@ -105,21 +98,29 @@ function ShowUserID(callback) {
         });
 	}
 
+app.get('/user/update', function (req, res) {
+	var name = req.query.name;
+	var score = req.query.score;
+	UpdateScore(name, score, function (er, result) {
+		res.end(result);
+	});
+});
+
+
 function UpdateScore(name, score, callback) {
 	var json = '';
 	var sql = util.format('UPDATE user SET score = %d WHERE name = "%s"', score, name);
 
-	connection.query(sql,
-		function (err) {
+	connection.query(sql,function (err) {
 
-			var result = '[{"success":"true"}]'
+		var result = '[{"success":"true"}]';
 
 			if (err) {
-				result = '[{"success":"false"}]'
+				result = '[{"success":"false"}]';
 				throw err;
 
 			}
 
 			callback(null, result);
 		});
-});
+}
