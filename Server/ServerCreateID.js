@@ -125,3 +125,26 @@ function UpdateScore(name, score, callback) {
 			callback(null, result);
 		});
 }
+
+app.get('/user/loadscore/:name', function (req, res) {
+
+	var login = req.params.name;
+
+	LoadScore(login, function (err, result) {
+		res.end(result);
+	});
+});
+
+
+function LoadScore(name, callback) {
+	var json = '';
+	var sql = ('SELECT name,score FROM user WHERE name = ?');
+
+	connection.query(sql, [name], function (err, rows, fields) {
+		if (err) throw err;
+
+		json = JSON.stringify(rows);
+
+		callback(null, json);
+	});
+}
